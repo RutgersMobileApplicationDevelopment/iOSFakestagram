@@ -10,6 +10,11 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let userNameField = UITextField()
+    let passWordField = UITextField()
+    let logoView = UIImageView()
+    let loginButton = UIButton(type: .system)
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,13 +25,14 @@ class ViewController: UIViewController {
         addUserNameField()
         addPassWordField()
         
+        addLoginButton()
+        
         // Add login button
         
     }
     
     func addLogo() {
         // Create UIImageView
-        let logoView = UIImageView()
         
         // Add insta logo to UIImageView
         logoView.image = UIImage(named: "instagram-logo.png")
@@ -54,7 +60,6 @@ class ViewController: UIViewController {
     
     func addUserNameField() {
         // create text field
-        let userNameField = UITextField()
         
         // set properties
         userNameField.placeholder = "Username"
@@ -76,12 +81,12 @@ class ViewController: UIViewController {
     
     func addPassWordField() {
         // create text field
-        let passWordField = UITextField()
         
         // set properties
         passWordField.placeholder = "Password"
         passWordField.delegate = self
         passWordField.textAlignment = .center
+        passWordField.isSecureTextEntry = true
         
         view.addSubview(passWordField)
         
@@ -97,18 +102,49 @@ class ViewController: UIViewController {
     }
     
     func addLoginButton() {
-        let loginButton = UIButton(type: .system)
         
         loginButton.setTitle("Login", for: .normal)
-        loginButton.setTitleColor(.blue, for: .normal)
+        loginButton.setTitleColor(.white, for: .normal)
+        loginButton.backgroundColor = .blue
+        
+        loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
         
         view.addSubview(loginButton)
         
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         
-        loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        let xConstraint = loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        let yConstraint = loginButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 70)
+        let leftConstraint = loginButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 80)
+        let rightConstraint = loginButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -80)
         
+        xConstraint.isActive = true
+        yConstraint.isActive = true
+        leftConstraint.isActive = true
+        rightConstraint.isActive = true
+
         
+    }
+    
+    @objc
+    func loginButtonPressed() {
+        print("Button Pressed")
+        
+        // if username field is not empty, username is whatever is in the username text field
+        //if password field is not empty, password is whatever is in the password field
+        if let username = userNameField.text ,
+        let password = passWordField.text {
+            if(!username.isEmpty && !password.isEmpty) {
+                print(username)
+                
+                let usernameViewController = UsernameViewController(username: username)
+                
+                self.navigationController?.pushViewController(usernameViewController, animated: true)
+                
+            } else {
+                print("Not Entered")
+            }
+        }
     }
     
 }
